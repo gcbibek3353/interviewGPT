@@ -185,13 +185,13 @@
     @apply bg-dark-200 rounded-full min-h-12 px-5 cursor-pointer border border-input  overflow-hidden;
   }
 
-  .card-border {
+  /* .card-border {
     @apply border-gradient p-0.5 rounded-2xl w-fit;
   }
 
   .card {
     @apply dark-gradient rounded-2xl min-h-full;
-  }
+  } */
 
   .form {
     @apply w-full;
@@ -204,9 +204,9 @@
       @apply !bg-dark-200 !rounded-full !min-h-12 !px-5 placeholder:!text-light-100;
     }
 
-    .btn {
+    /* .btn {
       @apply !w-full !bg-primary-200 !text-dark-100 hover:!bg-primary-200/80 !rounded-full !min-h-10 !font-bold !px-5 cursor-pointer;
-    }
+    } */
   }
 
   .call-view {
