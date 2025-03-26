@@ -8,6 +8,9 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import FormField from "../FormField"
+import { createUserWithEmailAndPassword } from "firebase/auth"
+import { auth } from "@/firebase/client"
+import { signUp } from "@/lib/actions/auth.action"
 
 const SignUpFormSchema = () => {
     return z.object({
@@ -30,11 +33,22 @@ const SignUpForm = () => {
         },
     })
 
-    const onSubmit = (data: z.infer<typeof formSchema>) => {
+    const onSubmit = async (data: z.infer<typeof formSchema>) => {
         try {
             const { name, email, password } = data;
+            const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+            const result = await signUp({
+                uid: userCredentials.user.uid,
+                name: name!,
+                email: email,
+                password
+            })
+            if (!result?.success) {
+                toast.error(result?.message);
+                return;
+            }
             toast.success("Account created successfully. Please sign in.");
-            router.push("/");
+            router.push("/sign-in");
         } catch (error) {
             console.log(error);
             toast.error(`There was an error: ${error}`);

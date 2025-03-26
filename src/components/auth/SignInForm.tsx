@@ -1,18 +1,20 @@
 'use client'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { Form } from '../ui/form'
+import { Form } from '@/components/ui/form'
 import FormField from '../FormField'
-import { Button } from '../ui/button'
+import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '@/firebase/client'
+import { signIn } from '@/lib/actions/auth.action'
 
 const SignInFormSchema = () => {
   return z.object({
-    name: z.string().min(2).max(50),
     email: z.string().email(),
     password: z.string().min(6).max(50)
   })
@@ -30,11 +32,24 @@ const SignInForm = () => {
     },
   })
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       const { email, password } = data;
+
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const idToken = await userCredential.user.getIdToken();
+
+      if (!idToken) {
+        toast.error('sign in failed')
+        return;
+      }
+
+      await signIn({
+        email, idToken
+      })
+
       toast.success("Logged In successfully.");
-      router.push("/");
+      router.push("/dashboard");
     } catch (error) {
       console.log(error);
       toast.error(`There was an error: ${error}`);
