@@ -10,12 +10,12 @@ const ONE_WEEK = 60 * 60 * 24 * 7;
 
 export async function signUp(params: SignUpParams) {
     const { uid, name, email } = params;
-    console.log(uid, name, email);
+    // console.log(uid, name, email);
     
     try {
         const userRef = doc(db, "users", uid);
         const userRecord = await getDoc(userRef);
-        console.log(userRecord);
+        // console.log(userRecord);
 
         if (userRecord.exists()) {
             return {
@@ -51,16 +51,27 @@ export async function signUp(params: SignUpParams) {
 
 export async function signIn(params: SignInParams) {
     const { email, idToken } = params;
-
     try {
+
+        const decodedToken = await auth.verifyIdToken(idToken);
+        
+        // Check if email matches the token
+        if (decodedToken.email !== email) {
+            return {
+                success: false,
+                message: "Email mismatch"
+            };
+        }
+        console.log(`control here`);
+        
+
         const userRecord = await auth.getUserByEmail(email);
         if (!userRecord) return {
             success: false,
             message: "user doesn't exist , create account instead"
-        }
-        console.log(userRecord);
+        }        
+        // console.log(`id token is ${idToken}`);
         
-
         await setSessionCookie(idToken);
 
     } catch (error) {
@@ -116,6 +127,6 @@ export async function getCurrentUser() : Promise<User | null> {
 
 export async function isAuthenticated() {
     const user = await getCurrentUser();
-    console.log(user);
+    // console.log(user);
     return !!user;
 }
