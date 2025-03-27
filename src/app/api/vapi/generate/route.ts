@@ -1,7 +1,8 @@
-import { db } from "@/firebase/admin";
+import { db } from "@/firebase/client";
 import { getRandomInterviewCover } from "@/lib/utils";
 import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 
 export async function GET() {
     return Response.json({
@@ -42,29 +43,18 @@ export async function POST(request: Request) {
             coverImage: getRandomInterviewCover(),
             createdAt: new Date().toISOString()
         }
-       
+        console.log(interview);
+        // await db.collection("interviews").add(interview);
 
-        console.log('Interview Object:', JSON.stringify(interview, null, 2));
-
-        // Attempt to sanitize and validate data
-        const sanitizedInterview = Object.fromEntries(
-            Object.entries(interview).map(([key, value]) => [
-                key, 
-                value === undefined ? null : 
-                value === '' ? null : 
-                value
-            ])
-        );
-
-        // Try insertion with sanitized data
-        await db.collection("interviews").doc().set(sanitizedInterview);
+        await addDoc(collection(db, "interviews"), interview);
 
         return Response.json({
             success: true,
             message: "Interview generated successfully",
-        },{
+        }, {
             status: 200
-        })
+        }
+        )
 
     } catch (error) {
         console.error(error);
