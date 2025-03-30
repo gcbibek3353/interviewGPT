@@ -4,18 +4,17 @@ import { getFirestore } from "firebase-admin/firestore";
 
 const init_firebase_admin = () => {
     const apps = getApps();
-    if (!apps.length) {
-        initializeApp({
-            credential: cert({
-                projectId: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PROJECT_ID,
-                clientEmail: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_CLIENT_EMAIL,
-                privateKey: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-            })
+    const app = apps.length ? apps[0] : initializeApp({
+        credential: cert({
+            projectId: process.env.FIREBASE_ADMIN_PROJECT_ID,
+            clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
+            privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n"),
         })
-    }
+    });
+ 
     return {
-        auth: getAuth(),
-        db : getFirestore()
+        auth: getAuth(app),
+        db : getFirestore(app)
     }
 }
 

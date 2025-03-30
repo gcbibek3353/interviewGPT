@@ -62,7 +62,7 @@ export async function signIn(params: SignInParams) {
                 message: "Email mismatch"
             };
         }
-        console.log(`control here`);
+        // console.log(`control here`);
         
 
         const userRecord = await auth.getUserByEmail(email);
