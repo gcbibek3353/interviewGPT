@@ -54,9 +54,11 @@ export async function signIn(params: SignInParams) {
     try {
 
         const decodedToken = await auth.verifyIdToken(idToken);
+        console.log(decodedToken);
         
         // Check if email matches the token
         if (decodedToken.email !== email) {
+            console.log(`email mismatch`);
             return {
                 success: false,
                 message: "Email mismatch"

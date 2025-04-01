@@ -39,7 +39,7 @@ interface User {
 }
 
 interface InterviewCardProps {
-  interviewId?: string;
+  id?: string;
   userId?: string;
   role: string;
   type: string;
@@ -68,7 +68,7 @@ interface GetFeedbackByInterviewIdParams {
 
 interface GetLatestInterviewsParams {
   userId: string;
-  limit?: number;
+  interviewLimit?: number;
 }
 
 interface SignInParams {
