@@ -6,10 +6,17 @@ import React, { useEffect, useState } from 'react'
 
 const Dashboard = () => {
   // const user = await getCurrentUser();
+  const [user,setUser] = useState<User | null>(null);
   const [userInterviews,setUserInterviews] = useState<Interview[] | null>(null);
   const [hasPastInterviews,setHasPastInterviews] = useState<boolean>(false);
   const [latestInterviews,setLatestInterviews] = useState<Interview[] | null>(null);
   const [hasUpcomingInterviews,setHasUpcomintInterviews] = useState<boolean>(false);
+
+  const getUser = async () => {
+    const curUser : User | null = await getCurrentUser();
+    console.log(curUser);
+    setUser(curUser);
+  }
 
   const fetchUserInterviews = async () => {
     try {
@@ -27,11 +34,11 @@ const Dashboard = () => {
     try {
       // const userInterviews = await getInterviewsByUserId(user?.id as string);
       const curLatestInterviews = await getLatestInterviews({userId :"MmiFJpaCSBhlxox0zFJOjsxmdPf1",interviewLimit : 10});
-      console.log(curLatestInterviews);
+      // console.log(curLatestInterviews);
       
       setLatestInterviews(curLatestInterviews);
       const curhasUpcomingInterviews = curLatestInterviews?.length! > 0;
-      console.log(curhasUpcomingInterviews);
+      // console.log(curhasUpcomingInterviews);
       
       setHasUpcomintInterviews(curhasUpcomingInterviews);
     } catch (error) {
@@ -40,6 +47,7 @@ const Dashboard = () => {
   }
 
   useEffect(()=> {
+    getUser();
     fetchUserInterviews();
     fetchLatestInterviews();
   },[])

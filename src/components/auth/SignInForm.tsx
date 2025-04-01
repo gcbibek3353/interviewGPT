@@ -38,12 +38,13 @@ const SignInForm = () => {
 
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const idToken = await userCredential.user.getIdToken();
+      // console.log(idToken);
 
       if (!idToken) {
         toast.error('sign in failed')
         return;
       }
-
+      
       await signIn({
         email, idToken
       })

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const InterviewCard = ({
   id,
   userId,
@@ -7,7 +9,7 @@ const InterviewCard = ({
   createdAt,
 }: InterviewCardProps) => {
 
-  console.log(id, userId, role, type, techstack, createdAt);
+  // console.log(id, userId, role, type, techstack, createdAt);
   
   // Format date for display
   const formattedDate = new Date(createdAt as string).toLocaleDateString('en-US', {
@@ -47,9 +49,9 @@ const InterviewCard = ({
       
       <div className="bg-gray-900 px-5 py-3 flex justify-between items-center">
         <span className="text-sm text-gray-400">User: {userId.substring(0, 8)}...</span>
-        <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors duration-300">
+        <Link href={`/dashboard/interview/${id}`} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors duration-300">
           View Details
-        </button>
+        </Link>
       </div>
     </div>
   );

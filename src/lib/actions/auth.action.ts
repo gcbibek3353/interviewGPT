@@ -2,7 +2,7 @@
 
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/firebase/client";
-import {auth} from "@/firebase/admin";
+import { auth } from "@/firebase/admin";
 import { getAuth } from "firebase-admin/auth";
 import { cookies } from "next/headers";
 
@@ -11,7 +11,7 @@ const ONE_WEEK = 60 * 60 * 24 * 7;
 export async function signUp(params: SignUpParams) {
     const { uid, name, email } = params;
     // console.log(uid, name, email);
-    
+
     try {
         const userRef = doc(db, "users", uid);
         const userRecord = await getDoc(userRef);
@@ -48,14 +48,11 @@ export async function signUp(params: SignUpParams) {
     }
 }
 
-
 export async function signIn(params: SignInParams) {
     const { email, idToken } = params;
     try {
-
         const decodedToken = await auth.verifyIdToken(idToken);
-        console.log(decodedToken);
-        
+
         // Check if email matches the token
         if (decodedToken.email !== email) {
             console.log(`email mismatch`);
@@ -64,16 +61,14 @@ export async function signIn(params: SignInParams) {
                 message: "Email mismatch"
             };
         }
-        // console.log(`control here`);
-        
 
         const userRecord = await auth.getUserByEmail(email);
         if (!userRecord) return {
             success: false,
             message: "user doesn't exist , create account instead"
-        }        
+        }
         // console.log(`id token is ${idToken}`);
-        
+
         await setSessionCookie(idToken);
 
     } catch (error) {
@@ -101,12 +96,12 @@ export async function setSessionCookie(idToken: string) {
     })
 }
 
-export async function getCurrentUser() : Promise<User | null> {
+export async function getCurrentUser(): Promise<User | null> {
     const cookieStore = await cookies();
 
     const sessionCookie = cookieStore.get('session')?.value;
 
-    if(!sessionCookie) return null;
+    if (!sessionCookie) return null;
 
     try {
         const decodedClaims = await auth.verifySessionCookie(sessionCookie, true);
@@ -123,7 +118,7 @@ export async function getCurrentUser() : Promise<User | null> {
         } as User;
     } catch (error) {
         console.log(error);
-        return null;        
+        return null;
     }
 }
 
