@@ -13,8 +13,8 @@ export async function getInterviewsByUserId(
         if (!userId) {
             return null;
         }
-        
-        
+
+
         const interviewsRef = collection(db, "interviews");
 
         const interviewsQuery = query(
@@ -37,7 +37,7 @@ export async function getInterviewsByUserId(
 
 export async function getLatestInterviews(params: GetLatestInterviewsParams) {
     const { userId, interviewLimit = 10 } = params;
-    console.log('user id calling latest interviews is ' , userId);
+    // console.log('user id calling latest interviews is ' , userId);
     try {
         const interviewsRef = collection(db, "interviews");
 
@@ -66,7 +66,7 @@ export async function getInterviewById(interviewId: string): Promise<Interview |
     try {
         const interviewRef = doc(db, 'interviews', interviewId);
         const interview = await getDoc(interviewRef);
-        console.log(interview);
+        // console.log(interview);
         return interview.data() as Interview | null;
     } catch (error) {
         console.error("Error fetching the interview:", error);
@@ -82,9 +82,12 @@ export async function createFeedback(params: CreateFeedbackParams) {
             `- ${sentence.role} : ${sentence.content} \n`
         )).join('');
 
-        const { object : {totalScore , categoryScores, strengths, areasForImprovement, finalAssessment} } = await generateObject({
+        console.log(process.env.NEXT_PUBLIC_GOOGLE_GENERATIVE_AI_API_KEY);
+
+        const { object: { totalScore, categoryScores, strengths, areasForImprovement, finalAssessment } } = await generateObject({
             model: google('gemini-2.0-flash-001', {
-                structuredOutputs: false
+                structuredOutputs: false,
+                apiKey: process.env.NEXT_PUBLIC_GOOGLE_GENERATIVE_AI_API_KEY, // TODO : find out why generateObject() is not automatically picking GOOGLE_GENERATIVE_AI_API_KEY env variable from .env file and remove this NEXT_PUBLIC_... ENV variable
             }),
             schema: feedbackSchema,
             prompt: `
@@ -102,8 +105,10 @@ export async function createFeedback(params: CreateFeedbackParams) {
             system:
                 "You are a professional interviewer analyzing a mock interview. Your task is to evaluate the candidate based on structured categories",
         });
+        console.log(finalAssessment, areasForImprovement);
 
-        const feedback = await setDoc(doc(db,"feedback") , {
+
+        const feedback = await setDoc(doc(db, "feedback"), {
             interviewId,
             userId,
             totalScore,
@@ -111,21 +116,23 @@ export async function createFeedback(params: CreateFeedbackParams) {
             strengths,
             areasForImprovement,
             finalAssessment,
-            createdAt : new Date().toISOString()
+            createdAt: new Date().toISOString()
         })
 
         return {
-            success : true,
-            // feedbackId : feedback.id;
-            feedbackId : 'static Id for now'
+            success: true,
+            feedbackId: feedback.id
+            // feedbackId : 'static Id for now'
         }
 
 
     } catch (error) {
-        console.error('Error saving feedback', error);
+        console.error('Error saving feedback');
+        console.log(error);
+
         return {
-            success : false,
-            feedbackId : ""
+            success: false,
+            feedbackId: ""
         }
     }
 

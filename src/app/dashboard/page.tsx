@@ -14,7 +14,7 @@ const Dashboard = () => {
 
   const getUser = async () => {
     const curUser: User | null = await getCurrentUser();
-    console.log(curUser);
+    // console.log(curUser);
     setUser(curUser);
   }
 
@@ -32,7 +32,7 @@ const Dashboard = () => {
   }
   const fetchLatestInterviews = async () => {
     try {
-      console.log(user);
+      // console.log(user);
       const curLatestInterviews = await getLatestInterviews({ userId: user?.id as string, interviewLimit: 10 });
       // const curLatestInterviews = await getLatestInterviews({userId :"MmiFJpaCSBhlxox0zFJOjsxmdPf1",interviewLimit : 10});
       // console.log(curLatestInterviews);
