@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react'
 import { vapi } from '@/lib/vapi.sdk';
 import { interviewer } from '@/constants';
+import { createFeedback } from '@/lib/actions/general.action';
 
 enum CallStatus {
     INACTIVE = 'INACTIVE',
@@ -60,18 +61,18 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
     }, [])
 
     const handleGenerateFeedBack = async (messages: SavedMessage[]) => {
-        console.log('Generate feedback Here');
-        // TODO : actually generate the feedback
-        const { success, id } = {
-            success: true,
-            id: 'random-id'
-        }
-        if (success && id) router.push(`/dashboard/interview/${interviewId}/feedback`)
+        console.log('Control reached here');
+        const { success, feedbackId } = await createFeedback({
+            interviewId: interviewId!,
+            userId: userId!,
+            transcript: messages
+        })
+        console.log(success, feedbackId);
+        if (success && feedbackId) router.push(`/dashboard/interview/${interviewId}/feedback`)
         else {
             console.log("error while generating feedback");
             router.push('/dashboard')
         }
-
     }
 
     useEffect(() => {
@@ -102,7 +103,6 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
                 }
             })
         }
-
     }
 
     const handleDisconnect = async () => {
@@ -130,7 +130,7 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
                             <span className="absolute -bottom-1 -right-1 w-5 h-5 bg-blue-500 rounded-full border-2 border-gray-800 animate-pulse"></span>
                         )}
                     </div>
-                    <h3 className="text-xl font-semibold text-blue-400">AI Interviewer</h3>
+                    <h3 className="text-xl font-semibold text-blue-400">{type === "generate" ? "AI Interview Generator" : "AI Interviewer"}</h3>
                 </div>
 
                 {/* Candidate Card */}

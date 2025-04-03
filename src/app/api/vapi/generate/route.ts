@@ -16,6 +16,9 @@ export async function GET() {
 export async function POST(request: Request) {
     const { type, role, level, techstack, amount, userid } = await request.json();
     try {
+
+        // The Vercel AI SDK abstracts away the low-level details of API authentication. When you use google('model-name'), the SDK assumes you’ve configured the API key in the environment and injects it into the request for you.
+        
         const { text: questions } = await generateText({
             model: google('gemini-2.0-flash-001'),
             prompt: `Prepare questions for a job interview.
@@ -63,6 +66,4 @@ export async function POST(request: Request) {
             status: 500
         });
     }
-
-
 }

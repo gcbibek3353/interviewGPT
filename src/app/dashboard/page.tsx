@@ -2,29 +2,29 @@
 import InterviewCard from '@/components/InterviewCard';
 import { getCurrentUser } from '@/lib/actions/auth.action'
 import { getInterviewsByUserId, getLatestInterviews } from '@/lib/actions/general.action';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 
 const Dashboard = () => {
-  // const user = await getCurrentUser();
-  const [user,setUser] = useState<User | null>(null);
-  const [userInterviews,setUserInterviews] = useState<Interview[] | null>(null);
-  const [hasPastInterviews,setHasPastInterviews] = useState<boolean>(false);
-  const [latestInterviews,setLatestInterviews] = useState<Interview[] | null>(null);
-  const [hasUpcomingInterviews,setHasUpcomintInterviews] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [userInterviews, setUserInterviews] = useState<Interview[] | null>(null);
+  const [hasPastInterviews, setHasPastInterviews] = useState<boolean>(false);
+  const [latestInterviews, setLatestInterviews] = useState<Interview[] | null>(null);
+  const [hasUpcomingInterviews, setHasUpcomintInterviews] = useState<boolean>(false);
 
   const getUser = async () => {
-    const curUser : User | null = await getCurrentUser();
+    const curUser: User | null = await getCurrentUser();
     console.log(curUser);
     setUser(curUser);
   }
 
   const fetchUserInterviews = async () => {
     try {
-      // const userInterviews = await getInterviewsByUserId(user?.id as string);
-      const curuserInterviews = await getInterviewsByUserId("MmiFJpaCSBhlxox0zFJOjsxmdPf1");
+      const curuserInterviews = await getInterviewsByUserId(user?.id as string);
+      // const curuserInterviews = await getInterviewsByUserId("MmiFJpaCSBhlxox0zFJOjsxmdPf1");
       setUserInterviews(curuserInterviews);
       const curhasPastInterviews = curuserInterviews?.length! > 0;
-      
+
       setHasPastInterviews(curhasPastInterviews);
     } catch (error) {
       console.log(error);
@@ -32,28 +32,36 @@ const Dashboard = () => {
   }
   const fetchLatestInterviews = async () => {
     try {
-      // const userInterviews = await getInterviewsByUserId(user?.id as string);
-      const curLatestInterviews = await getLatestInterviews({userId :"MmiFJpaCSBhlxox0zFJOjsxmdPf1",interviewLimit : 10});
+      console.log(user);
+      const curLatestInterviews = await getLatestInterviews({ userId: user?.id as string, interviewLimit: 10 });
+      // const curLatestInterviews = await getLatestInterviews({userId :"MmiFJpaCSBhlxox0zFJOjsxmdPf1",interviewLimit : 10});
       // console.log(curLatestInterviews);
-      
+
       setLatestInterviews(curLatestInterviews);
       const curhasUpcomingInterviews = curLatestInterviews?.length! > 0;
       // console.log(curhasUpcomingInterviews);
-      
+
       setHasUpcomintInterviews(curhasUpcomingInterviews);
     } catch (error) {
       console.log(error);
     }
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     getUser();
-    fetchUserInterviews();
-    fetchLatestInterviews();
-  },[])
+  }, []);
+
+  useEffect(() => {
+    if (user?.id) { // Only fetch if user exists and has an id
+      fetchUserInterviews();
+      fetchLatestInterviews();
+    }
+  }, [user]); // Run when user changes
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-8 text-white">
+      <h2>Welcome back ! {user?.name}</h2>
+      <Link href={'/dashboard/interview'}>Create New Interview</Link>
       <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800">
         <h2 className="text-2xl font-bold mb-6 text-blue-400 flex items-center">
           <span className="mr-2">
@@ -76,7 +84,7 @@ const Dashboard = () => {
           </div>
         )}
       </div>
-      
+
       <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800">
         <h2 className="text-2xl font-bold mb-6 text-green-400 flex items-center">
           <span className="mr-2">

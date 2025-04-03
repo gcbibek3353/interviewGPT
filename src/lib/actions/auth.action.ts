@@ -67,7 +67,6 @@ export async function signIn(params: SignInParams) {
             success: false,
             message: "user doesn't exist , create account instead"
         }
-        // console.log(`id token is ${idToken}`);
 
         await setSessionCookie(idToken);
 
@@ -93,7 +92,7 @@ export async function setSessionCookie(idToken: string) {
         secure: process.env.NODE_ENV === "production",
         path: '/',
         sameSite: "lax"
-    })
+    })    
 }
 
 export async function getCurrentUser(): Promise<User | null> {
@@ -124,6 +123,5 @@ export async function getCurrentUser(): Promise<User | null> {
 
 export async function isAuthenticated() {
     const user = await getCurrentUser();
-    // console.log(user);
     return !!user;
 }

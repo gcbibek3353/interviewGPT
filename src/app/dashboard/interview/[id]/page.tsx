@@ -45,7 +45,7 @@ const Interview = () => {
                 <p>{interview?.type}</p>
             </div>
             {/* <Agent userName={user?.name} type="interview" interviewId={id} questions={interview?.questions} /> */}
-            <Agent userName="Rajesh Hamal" type="interview" interviewId={id} questions={interview?.questions} />
+            <Agent userName="Rajesh Hamal" userId={"MmiFJpaCSBhlxox0zFJOjsxmdPf1"} type="interview" interviewId={id} questions={interview?.questions} />
         </div>
     )
 }
