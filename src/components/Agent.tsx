@@ -5,6 +5,7 @@ import React, { useEffect } from 'react'
 import { vapi } from '@/lib/vapi.sdk';
 import { interviewer } from '@/constants';
 import { createFeedback } from '@/lib/actions/general.action';
+import { Mic } from 'lucide-react';
 
 enum CallStatus {
     INACTIVE = 'INACTIVE',
@@ -113,70 +114,121 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
     const latestMessage = messages[messages.length - 1]?.content;
     const isCallInactiveOrFinished = callStatus === CallStatus.INACTIVE || callStatus === CallStatus.FINISHED;
     return (
-        <div className="bg-gray-900 text-gray-100 min-h-screen p-6 flex flex-col items-center justify-between">
-            {/* Cards Container */}
-            <div className="w-full max-w-4xl flex justify-between gap-8 mb-8">
-                {/* AI Interviewer Card */}
-                <div className="bg-gray-800 rounded-xl p-6 flex-1 flex flex-col items-center border border-blue-500/30">
-                    <div className="relative mb-4">
-                        <Image
-                            src="/ai-avatar.png"
-                            alt="agent"
-                            width={100}
-                            height={100}
-                            className="rounded-full border-2 border-blue-500"
-                        />
-                        {isSpeaking && (
-                            <span className="absolute -bottom-1 -right-1 w-5 h-5 bg-blue-500 rounded-full border-2 border-gray-800 animate-pulse"></span>
+        <div className="bg-gray-900 text-gray-100 p-4 md:p-8">
+            {/* Main Container */}
+            <div className="max-w-5xl mx-auto bg-gray-800/40 rounded-2xl shadow-xl border border-gray-700 backdrop-blur-sm overflow-hidden">
+                {/* Header Section */}
+                <div className="bg-gradient-to-r from-gray-800 to-gray-900 border-b border-gray-700 px-6 py-4">
+                    <h2 className="text-xl md:text-2xl font-bold text-purple-400 flex items-center gap-2">
+                        <div className="h-3 w-3 bg-purple-500 rounded-full animate-pulse"></div>
+                        {type === "generate" ? "AI Interview Generator" : "AI Interview Session"}
+                    </h2>
+                </div>
+
+                {/* Content Area */}
+                <div className="p-4 md:p-8">
+                    {/* User Cards */}
+                    <div className="flex flex-col md:flex-row gap-6 mb-10">
+                        {/* AI Interviewer Card */}
+                        <div className="flex-1 bg-gray-800 rounded-xl p-6 border border-purple-500/30 relative group overflow-hidden transition-all duration-300 hover:border-purple-400/50">
+                            {/* Background Pattern */}
+                            <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-purple-600/10 rounded-full blur-2xl group-hover:bg-purple-600/20 transition-all duration-500"></div>
+
+                            <div className="flex items-center gap-4">
+                                <div className="relative">
+                                    <div className="mx-auto w-16 h-16 bg-purple-600/20 rounded-full flex items-center justify-center mb-4">
+                                        <Mic className="w-8 h-8 text-purple-500" />
+                                    </div>
+                                    {isSpeaking && (
+                                        <div className="absolute -bottom-1 -right-1 flex items-center justify-center">
+                                            <span className="w-4 h-4 bg-purple-500 rounded-full border-2 border-gray-800"></span>
+                                            <span className="w-4 h-4 bg-purple-500/50 rounded-full absolute animate-ping"></span>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="relative z-10">
+                                    <span className="px-3 py-1 text-xs bg-purple-900/60 text-purple-200 rounded-full mb-2 inline-block">Active</span>
+                                    <h3 className="text-lg md:text-xl font-bold text-white">{type === "generate" ? "AI Interview Generator" : "AI Interviewer"}</h3>
+                                    <p className="text-sm text-gray-400">Powered by advanced AI</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Candidate Card */}
+                        <div className="flex-1 bg-gray-800 rounded-xl p-6 border border-gray-700 relative group overflow-hidden transition-all duration-300 hover:border-gray-600">
+                            {/* Background Pattern */}
+                            <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-gray-700/50 rounded-full blur-2xl"></div>
+
+                            <div className="flex items-center gap-4">
+                                <div className="relative h-16 w-16 flex items-center justify-center">
+                                    <Image
+                                        src="/user-avatar.png"
+                                        alt="user"
+                                        width={80}
+                                        height={80}
+                                        className="rounded-full border-2 shadow-lg"
+                                    />
+                                </div>
+
+                                <div className="relative z-10">
+                                    <span className="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded-full mb-2 inline-block">Candidate</span>
+                                    <h3 className="text-lg md:text-xl font-bold text-white">{userName}</h3>
+                                    <p className="text-sm text-gray-400">Interview participant</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Messages Area */}
+                    {messages.length > 0 && (
+                        <div className="mb-10">
+                            <h3 className="text-sm uppercase text-gray-500 font-medium mb-3 flex items-center gap-2">
+                                <div className="h-1 w-5 bg-purple-500 rounded-full"></div>
+                                Current Conversation
+                            </h3>
+
+                            <div className="bg-gray-900 border border-gray-700 rounded-xl p-5 shadow-inner">
+                                <p className="text-gray-300 text-lg">
+                                    {latestMessage}
+                                </p>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Controls Section */}
+                    <div className="flex flex-col items-center justify-center mt-6">
+                        <h3 className="text-sm uppercase text-gray-500 font-medium mb-4 flex items-center gap-2">
+                            <div className="h-1 w-5 bg-purple-500 rounded-full"></div>
+                            Call Controls
+                        </h3>
+
+                        {callStatus !== CallStatus.ACTIVE ? (
+                            <button
+                                onClick={handleCall}
+                                className="bg-purple-600 hover:bg-purple-500 text-white font-medium py-4 px-10 rounded-full flex items-center gap-3 transition-all duration-300 shadow-lg shadow-purple-900/20 hover:shadow-purple-600/30">
+                                <div className="relative flex items-center justify-center h-4 w-4">
+                                    <span className="absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75 animate-ping"></span>
+                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-purple-300"></span>
+                                </div>
+                                <span className="text-lg">
+                                    {isCallInactiveOrFinished
+                                        ? 'Start Interview'
+                                        : 'Connecting...'}
+                                </span>
+                            </button>
+                        ) : (
+                            <button
+                                onClick={handleDisconnect}
+                                className="bg-red-600 hover:bg-red-500 text-white font-medium py-4 px-10 rounded-full flex items-center gap-2 transition-all duration-300 shadow-lg shadow-red-900/20 hover:shadow-red-600/30">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                </svg>
+                                <span className="text-lg">End Interview</span>
+                            </button>
                         )}
                     </div>
-                    <h3 className="text-xl font-semibold text-blue-400">{type === "generate" ? "AI Interview Generator" : "AI Interviewer"}</h3>
                 </div>
-
-                {/* Candidate Card */}
-                <div className="bg-gray-800 rounded-xl p-6 flex-1 flex flex-col items-center border border-purple-500/30">
-                    <div className="mb-4">
-                        <Image
-                            src="/user-avatar.png"
-                            alt="user"
-                            width={100}
-                            height={100}
-                            className="rounded-full border-2 border-purple-500"
-                        />
-                    </div>
-                    <h3 className="text-xl font-semibold text-purple-400">{userName}</h3>
-                </div>
-            </div>
-
-            {/* Last Message */}
-            {messages.length > 0 && (
-                <div className="w-full max-w-2xl mb-8 text-center">
-                    <p className="bg-gray-800/50 text-gray-300 text-lg p-4 rounded-lg border border-gray-700 animate-fade-in">
-                        {latestMessage}
-                    </p>
-                </div>
-            )}
-
-            {/* Call Button */}
-            <div className="w-full flex justify-center">
-                {callStatus !== CallStatus.ACTIVE ? (
-                    <button
-                        onClick={handleCall}
-                        className="bg-blue-600 hover:bg-blue-500 text-white font-medium py-3 px-8 rounded-full flex items-center gap-2 transition-all duration-200 shadow-lg hover:shadow-blue-500/20">
-                        <span className="w-2 h-2 bg-blue-300 rounded-full animate-ping"></span>
-                        <span>
-                            {isCallInactiveOrFinished
-                                ? 'Start Call'
-                                : 'Connecting...'}
-                        </span>
-                    </button>
-                ) : (
-                    <button
-                        onClick={handleDisconnect}
-                        className="bg-red-600 hover:bg-red-500 text-white font-medium py-3 px-8 rounded-full transition-all duration-200 shadow-lg hover:shadow-red-500/20">
-                        End Call
-                    </button>
-                )}
             </div>
         </div>
     )
