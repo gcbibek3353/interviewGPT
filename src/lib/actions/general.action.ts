@@ -143,20 +143,17 @@ export async function getFeedbackByInterviewAndUserId(params: GetFeedbackByInter
     try {
         const { interviewId, userId } = params;
 
-        // Validate required parameters
         if (!interviewId) {
             throw new Error('interviewId is required');
         }
 
-        // Temporarily Hardcoded
-        // if (!userId) {
-        //     throw new Error('userId is required');
-        // }
+        if (!userId) {
+            throw new Error('userId is required');
+        }
 
         const feedbackRef = collection(db, 'feedback');
 
-        const q = query(feedbackRef, where('interviewId', '==', interviewId), where('userId', '==', "MmiFJpaCSBhlxox0zFJOjsxmdPf1"));
-        // const q = query(feedbackRef, where('interviewId', '==', interviewId), where('userId', '==', userId));
+        const q = query(feedbackRef, where('interviewId', '==', interviewId), where('userId', '==', userId));
         const querySnapshot = await getDocs(q);
 
         if (!querySnapshot.empty) {
