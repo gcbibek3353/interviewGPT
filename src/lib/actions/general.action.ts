@@ -1,9 +1,9 @@
 "use client"; // This is not the server action because we are using client side SDK of firebase
 
-import { collection, query, where, orderBy, limit, getDocs, getDoc, doc, setDoc } from "firebase/firestore";
+import { collection, query, where, orderBy, limit, getDocs, getDoc, doc, setDoc,addDoc } from "firebase/firestore";
 import { db } from "@/firebase/client";
 import { generateObject } from "ai";
-import { google } from "@ai-sdk/google";
+import { google } from "@/lib/google-ai.config";
 import { feedbackSchema } from "@/constants";
 
 export async function getInterviewsByUserId(
@@ -82,17 +82,13 @@ export async function createFeedback(params: CreateFeedbackParams) {
             `- ${sentence.role} : ${sentence.content} \n`
         )).join('');
 
-        console.log(process.env.NEXT_PUBLIC_GOOGLE_GENERATIVE_AI_API_KEY);
-
-        const { object} = await generateObject({
-            model: google('gemini-2.0-flash-001', {
-                structuredOutputs: false,
-                apiKey: process.env.NEXT_PUBLIC_GOOGLE_GENERATIVE_AI_API_KEY, // TODO : find out why generateObject() is not automatically picking GOOGLE_GENERATIVE_AI_API_KEY env variable from .env file and remove this NEXT_PUBLIC_... ENV variable
-                environment: {
-                    GOOGLE_GENERATIVE_AI_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_GENERATIVE_AI_API_KEY
-                }
-            }
-            ),
+        const googleModel = google('gemini-2.0-flash-001', {
+            structuredOutputs: false,
+            apiKey: process.env.NEXT_PUBLIC_GOOGLE_GENERATIVE_AI_API_KEY // Explicitly pass the API key here
+        })
+        console.log(formattedTranscript);
+        const { object } = await generateObject({
+             model: googleModel,
             schema: feedbackSchema,
             prompt: `
             You are an AI interviewer analyzing a mock interview. Your task is to evaluate the candidate based on structured categories. Be thorough and detailed in your analysis. Don't be lenient with the candidate. If there are mistakes or areas for improvement, point them out.
@@ -109,26 +105,28 @@ export async function createFeedback(params: CreateFeedbackParams) {
             system:
                 "You are a professional interviewer analyzing a mock interview. Your task is to evaluate the candidate based on structured categories",
         });
-        // console.log(finalAssessment, areasForImprovement);
 
+        console.log(object);
+        console.log(interviewId, userId);
+        const tempuserId = 'MmiFJpaCSBhlxox0zFJOjsxmdPf1';
 
-        const feedback = await setDoc(doc(db, "feedback"), {
+        const feedbackRef = collection(db, "feedback"); 
+        const feedback = await addDoc(feedbackRef, {
             interviewId,
-            userId,
-            totalScore : object.totalScore,
-            categoryScores : object.categoryScores,
-            strengths : object.strengths,
-            areasForImprovement : object.areasForImprovement,
-            finalAssessment : object.finalAssessment,
+            userId : tempuserId,
+            totalScore: object.totalScore,
+            categoryScores: object.categoryScores,
+            strengths: object.strengths,
+            areasForImprovement: object.areasForImprovement,
+            finalAssessment: object.finalAssessment,
             createdAt: new Date().toISOString()
-        })
+        });
 
         return {
             success: true,
             feedbackId: feedback.id
             // feedbackId : 'static Id for now'
         }
-
 
     } catch (error) {
         console.error('Error saving feedback');
