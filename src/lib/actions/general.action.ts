@@ -1,6 +1,6 @@
 "use client"; // This is not the server action because we are using client side SDK of firebase
 
-import { collection, query, where, orderBy, limit, getDocs, getDoc, doc, setDoc,addDoc } from "firebase/firestore";
+import { collection, query, where, orderBy, limit, getDocs, getDoc, doc, setDoc, addDoc } from "firebase/firestore";
 import { db } from "@/firebase/client";
 import { generateObject } from "ai";
 import { google } from "@/lib/google-ai.config";
@@ -84,11 +84,10 @@ export async function createFeedback(params: CreateFeedbackParams) {
 
         const googleModel = google('gemini-2.0-flash-001', {
             structuredOutputs: false,
-            apiKey: process.env.NEXT_PUBLIC_GOOGLE_GENERATIVE_AI_API_KEY // Explicitly pass the API key here
         })
         console.log(formattedTranscript);
         const { object } = await generateObject({
-             model: googleModel,
+            model: googleModel,
             schema: feedbackSchema,
             prompt: `
             You are an AI interviewer analyzing a mock interview. Your task is to evaluate the candidate based on structured categories. Be thorough and detailed in your analysis. Don't be lenient with the candidate. If there are mistakes or areas for improvement, point them out.
@@ -110,10 +109,10 @@ export async function createFeedback(params: CreateFeedbackParams) {
         console.log(interviewId, userId);
         const tempuserId = 'MmiFJpaCSBhlxox0zFJOjsxmdPf1';
 
-        const feedbackRef = collection(db, "feedback"); 
+        const feedbackRef = collection(db, "feedback");
         const feedback = await addDoc(feedbackRef, {
             interviewId,
-            userId : tempuserId,
+            userId: tempuserId,
             totalScore: object.totalScore,
             categoryScores: object.categoryScores,
             strengths: object.strengths,
@@ -138,4 +137,39 @@ export async function createFeedback(params: CreateFeedbackParams) {
         }
     }
 
+}
+
+export async function getFeedbackByInterviewAndUserId(params: GetFeedbackByInterviewAndUserIdParams) {
+    try {
+        const { interviewId, userId } = params;
+
+        // Validate required parameters
+        if (!interviewId) {
+            throw new Error('interviewId is required');
+        }
+
+        // Temporarily Hardcoded
+        // if (!userId) {
+        //     throw new Error('userId is required');
+        // }
+
+        const feedbackRef = collection(db, 'feedback');
+
+        const q = query(feedbackRef, where('interviewId', '==', interviewId), where('userId', '==', "MmiFJpaCSBhlxox0zFJOjsxmdPf1"));
+        // const q = query(feedbackRef, where('interviewId', '==', interviewId), where('userId', '==', userId));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            const feedback = querySnapshot.docs[0];
+            console.log(feedback);
+            return {
+                id: feedback.id,
+                ...feedback.data()
+            } as Feedback;
+        }
+        return null;
+    } catch (error) {
+        console.error(`Error fetching database`, error);
+        return null;
+    }
 }

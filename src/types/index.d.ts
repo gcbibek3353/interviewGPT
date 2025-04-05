@@ -62,7 +62,7 @@ interface RouteParams {
   searchParams: Promise<Record<string, string>>;
 }
 
-interface GetFeedbackByInterviewIdParams {
+interface GetFeedbackByInterviewAndUserIdParams {
   interviewId: string;
   userId: string;
 }
