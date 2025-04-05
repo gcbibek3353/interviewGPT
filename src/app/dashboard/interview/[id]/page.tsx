@@ -2,6 +2,7 @@
 import Agent from '@/components/Agent';
 import { getCurrentUser } from '@/lib/actions/auth.action';
 import { getInterviewById } from '@/lib/actions/general.action';
+import { initializeApp } from 'firebase/app';
 import { redirect, useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
@@ -14,16 +15,21 @@ const Interview = () => {
     const getUser = async () => {
         const user = await getCurrentUser();
         setUser(user);
+        return user;
     }
 
     const fetchInterview = async () => {
         const res = await getInterviewById(id);
-        setInterview(res)
+        setInterview(res);
+        return res;
     }
 
     useEffect(() => {
-        fetchInterview();
-        getUser();
+        const initialize = async () => {
+            await getUser();
+            await fetchInterview();
+        }
+        initialize();
     }, [])
 
     return (
@@ -53,13 +59,13 @@ const Interview = () => {
                 </div>
 
                 {/* Agent Component Container */}
-                            <Agent
-                                userName={user?.name as string}
-                                type="interview"
-                                interviewId={id}
-                                questions={interview?.questions}
-                            />
-                  
+                <Agent
+                    userName={user?.name as string}
+                    type="interview"
+                    interviewId={id}
+                    questions={interview?.questions}
+                />
+
 
                 {/* Footer Note */}
                 <div className="mt-6 text-center text-gray-500 text-sm">

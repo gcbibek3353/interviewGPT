@@ -148,8 +148,8 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
                                 </div>
 
                                 <div className="relative z-10">
-                                    <span className="px-3 py-1 text-xs bg-purple-900/60 text-purple-200 rounded-full mb-2 inline-block">Active</span>
-                                    <h3 className="text-lg md:text-xl font-bold text-white">{type === "generate" ? "AI Interview Generator" : "AI Interviewer"}</h3>
+                                    <span className="px-3 py-1 text-xs bg-purple-900/60 text-purple-200 rounded-full mb-2 inline-block">Interviewer</span>
+                                    <h3 className="text-lg md:text-xl font-bold text-white">{type === "generate" ? "AI Interview Generator" : "InterviewGPT"}</h3>
                                     <p className="text-sm text-gray-400">Powered by advanced AI</p>
                                 </div>
                             </div>
