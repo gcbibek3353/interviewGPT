@@ -38,7 +38,7 @@ We as members, contributors, and leaders pledge to make participation in our com
 ### Step-by-Step Setup
 1. **Fork and Clone the Repository**
    ```bash
-   git clone https://github.com/your-username/interview_gpt.git
+   git clone https://github.com/gcbibek3353/interviewGPT.git
    cd interview_gpt
    ```
 
@@ -80,19 +80,6 @@ We as members, contributors, and leaders pledge to make participation in our com
 - Add comments for complex logic
 - Keep functions small and focused
 - Use modern ES6+ features when appropriate
-
-### Project Structure
-
-interview_gpt/
-├── src/
-│ ├── app/ # Next.js app router pages
-│ ├── components/ # Reusable React components
-│ ├── lib/ # Utility functions and helpers
-│ ├── types/ # TypeScript type definitions
-│ ├── constants/ # Constant values and configurations
-│ └── firebase/ # Firebase configuration and helpers
-├── public/ # Static assets
-└── tests/ # Test files
 
 
 ### Testing
