@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# InterviewGPT 🎯
 
-## Getting Started
+InterviewGPT is an AI-powered interview preparation platform that helps users practice and improve their interviewing skills through interactive voice conversations and personalized feedback.
 
-First, run the development server:
+## 🌟 Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 1. AI Voice Assistant
+- Natural voice conversations with an intelligent AI interviewer
+- Real-time speech recognition and processing
+- Dynamic response generation based on user answers
+- Professional and friendly interview environment simulation
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Personalized Interview Generation
+- Custom interview creation based on:
+  - Job role/position
+  - Experience level
+  - Required tech stack
+  - Interview type (behavioral/technical focus)
+  - Desired number of questions
+- Smart question generation using advanced AI models
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Interactive Interview Sessions
+- Real-time voice-based conversations
+- Natural flow of questions and answers
+- Professional interview simulation
+- Adaptive follow-up questions
+- Support for both technical and behavioral interviews
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Comprehensive Feedback System
+- Detailed performance assessment in key areas:
+  - Communication Skills (0-100)
+  - Technical Knowledge (0-100)
+  - Problem-Solving Abilities (0-100)
+  - Cultural & Role Fit (0-100)
+  - Confidence & Clarity (0-100)
+- Actionable improvement suggestions
+- Detailed transcript analysis
 
-## Learn More
+### 5. User Dashboard
+- Track interview history
+- Access past interview transcripts
+- Review feedback and improvements
+- Monitor progress over time
 
-To learn more about Next.js, take a look at the following resources:
+### 6. Technology Stack
+- Built with Next.js for optimal performance
+- Firebase integration for data management
+- Advanced AI models for natural language processing
+- Real-time voice processing capabilities
+- Secure user authentication
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 7. Customization Options
+- Multiple interview types
+- Various industry sectors
+- Different experience levels
+- Customizable question sets
+- Flexible interview duration
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🔧 Technical Requirements
+- Modern web browser with microphone support
+- Stable internet connection
+- User account creation required
 
-## Deploy on Vercel
+## 🔐 Privacy & Security
+- Secure user authentication
+- Protected interview sessions
+- Private feedback storage
+- Encrypted data transmission
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 💡 Best Practices
+1. Use a quiet environment for best voice recognition
+2. Complete the full interview session for comprehensive feedback
+3. Review feedback carefully for improvement areas
+4. Practice regularly with different interview types
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🤝 Support
+Need help? Contact our support team for assistance with:
+- Technical issues
+- Account management
+- Feature requests
+- General inquiries
+
+## 📝 License
+This project is licensed under standard terms and conditions.
+
+---
+Built with ❤️ using Next.js , Gemini and Vapi AI 

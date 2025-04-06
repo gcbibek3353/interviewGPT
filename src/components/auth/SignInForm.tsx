@@ -112,8 +112,8 @@ const SignInForm = () => {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-300">Email</label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <div className="relative ">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center justify-center pointer-events-none">
                         <Mail className="h-5 w-5 text-gray-500" />
                       </div>
                       <FormField
@@ -134,9 +134,9 @@ const SignInForm = () => {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <label className="text-sm font-medium text-gray-300">Password</label>
-                      <Link href="/forgot-password" className="text-sm text-purple-500 hover:text-purple-400">
+                      {/* <Link href="" className="text-sm text-purple-500 hover:text-purple-400">
                         Forgot password?
-                      </Link>
+                      </Link> */}
                     </div>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -162,12 +162,12 @@ const SignInForm = () => {
                         {showPassword ? (
                           <div>
                             <span>{showPassword.toString()}</span>
-                            <EyeOff className="h-5 w-5 text-gray-500" />
+                            <Eye className="h-5 w-5 text-gray-500" />
                           </div>
                         ) : (
                           <div>
                             <span>{showPassword.toString()}</span>
-                            <Eye className="h-5 w-5 text-gray-500" />
+                            <EyeOff className="h-5 w-5 text-gray-500" />
                           </div>
                         )}
                       </button>
