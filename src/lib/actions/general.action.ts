@@ -106,7 +106,7 @@ export async function createFeedback(params: CreateFeedbackParams) {
         });
 
         console.log(object);
-        console.log(interviewId, userId);
+        // console.log(interviewId, userId);
         const tempuserId = 'MmiFJpaCSBhlxox0zFJOjsxmdPf1';
 
         const feedbackRef = collection(db, "feedback");
