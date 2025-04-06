@@ -145,7 +145,6 @@ export default function Home() {
           <div className="flex flex-wrap gap-6">
             <Link href="/privacy" className="text-gray-400 hover:text-gray-300 transition">Privacy</Link>
             <Link href="/terms" className="text-gray-400 hover:text-gray-300 transition">Terms</Link>
-            <Link href="/contact" className="text-gray-400 hover:text-gray-300 transition">Contact</Link>
           </div>
         </div>
         <div className="text-center mt-6 text-gray-500 text-sm">
