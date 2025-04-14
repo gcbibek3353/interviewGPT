@@ -1,7 +1,7 @@
 'use client'
 import InterviewCard from '@/components/InterviewCard';
 import { getCurrentUser } from '@/lib/actions/auth.action'
-import { getInterviewsByUserId, getLatestInterviews } from '@/lib/actions/general.action';
+import { getCompletedInterviews, getInterviewsByUserId, getLatestInterviews } from '@/lib/actions/general.action';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 
@@ -18,6 +18,7 @@ const Dashboard = () => {
     setUser(curUser);
   }
 
+
   const fetchUserInterviews = async () => {
     try {
       const curuserInterviews = await getInterviewsByUserId(user?.id as string);
@@ -33,13 +34,10 @@ const Dashboard = () => {
   const fetchLatestInterviews = async () => {
     try {
       // console.log(user);
-      const curLatestInterviews = await getLatestInterviews({ userId: user?.id as string, interviewLimit: 10 });
-      // const curLatestInterviews = await getLatestInterviews({userId :"MmiFJpaCSBhlxox0zFJOjsxmdPf1",interviewLimit : 10});
-      // console.log(curLatestInterviews);
+      const curLatestInterviews = await getLatestInterviews({ userId: user?.id as string, interviewLimit: 10 })
 
       setLatestInterviews(curLatestInterviews);
       const curhasUpcomingInterviews = curLatestInterviews?.length! > 0;
-      // console.log(curhasUpcomingInterviews);
 
       setHasUpcomintInterviews(curhasUpcomingInterviews);
     } catch (error) {
@@ -55,6 +53,7 @@ const Dashboard = () => {
     if (user?.id) { // Only fetch if user exists and has an id
       fetchUserInterviews();
       fetchLatestInterviews();
+      getCompletedInterviews(user);
     }
   }, [user]); // Run when user changes
 
@@ -76,7 +75,7 @@ const Dashboard = () => {
         </Link>
       </div>
   
-      {/* Past Interviews Section */}
+      {/* Your Interviews Section */}
       <div className="bg-gray-900 rounded-xl p-6 shadow-xl border border-gray-800 hover:border-purple-500/30 transition-all duration-300">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-purple-400 flex items-center">
@@ -85,7 +84,7 @@ const Dashboard = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </span>
-            Your Interview History
+            Your Interviews
           </h2>
           {hasPastInterviews && (
             <span className="text-sm text-gray-400">
@@ -157,6 +156,11 @@ const Dashboard = () => {
           </div>
         )}
       </div>
+
+      {/* Past Interviews Section */}
+
+
+
   
       {/* Stats Section (Bonus) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

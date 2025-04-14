@@ -87,6 +87,7 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
         setCallStatus(CallStatus.CONNECTING);
 
         if (type === 'generate') {
+            // starting vapi call with workflow_id
             await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
                 variableValues: {
                     username: userName,
@@ -98,6 +99,8 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
             if (questions) {
                 formattedQuestions = questions.map(question => `- ${question}`).join('\n')
             }
+            // starting vapi call with assistant config ...
+            // Learn more at : https://docs.vapi.ai/sdk/web
             await vapi.start(interviewer, {
                 variableValues: {
                     questions: formattedQuestions

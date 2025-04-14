@@ -170,3 +170,25 @@ export async function getFeedbackByInterviewAndUserId(params: GetFeedbackByInter
         return null;
     }
 }
+
+export async function getCompletedInterviews(userId : string) {
+    try {
+        const feedbackRef = collection(db, "feedback");
+
+        const feedbacksQuery = query(
+            feedbackRef,
+            where("userId", "==", userId),
+            orderBy("createdAt", "desc")
+        );
+
+        const feedbacksSnapshot = await getDocs(feedbacksQuery);
+        console.log(feedbacksSnapshot);
+        // return feedbacksSnapshot.docs.map((doc) => ({
+        //     id: doc.id,
+        //     ...doc.data(),
+        // })) as Interview[];
+    } catch (error) {
+        console.error("Error fetching completed feedbacks:", error);
+        return null;
+    }
+}

@@ -86,13 +86,23 @@ export async function setSessionCookie(idToken: string) {
         expiresIn: ONE_WEEK * 1000
     })
 
-    cookieStore.set('session', sessionCookie, {
+    console.log("About to set cookie with options:", {
         maxAge: ONE_WEEK,
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         path: '/',
         sameSite: "lax"
+    });
+
+    cookieStore.set('session', sessionCookie, {
+        maxAge: ONE_WEEK,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        path: '/',
+       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+       domain: process.env.COOKIE_DOMAIN
     })    
+    console.log("Cookie set successfully");
 }
 
 export async function getCurrentUser(): Promise<User | null> {
