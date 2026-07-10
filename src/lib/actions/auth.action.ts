@@ -48,6 +48,37 @@ export async function signUp(params: SignUpParams) {
     }
 }
 
+export async function signInWithOAuth(params: {
+    uid: string;
+    name: string;
+    email: string;
+    idToken: string;
+}) {
+    const { uid, name, email, idToken } = params;
+    try {
+        const userRef = doc(db, "users", uid);
+        const userRecord = await getDoc(userRef);
+
+        // Create the Firestore profile the first time an OAuth user signs in.
+        if (!userRecord.exists()) {
+            await setDoc(userRef, { name, email });
+        }
+
+        await setSessionCookie(idToken);
+
+        return {
+            success: true,
+            message: "Signed in successfully"
+        };
+    } catch (error) {
+        console.error("OAuth sign in error", error);
+        return {
+            success: false,
+            message: "Failed to sign in with Google"
+        };
+    }
+}
+
 export async function signIn(params: SignInParams) {
     const { email, idToken } = params;
     try {
