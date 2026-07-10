@@ -75,120 +75,112 @@ export default function Home() {
         </div>
 
         <section className="mx-auto grid max-w-6xl items-center gap-14 px-6 pt-10 pb-24 lg:grid-cols-[1.05fr_0.95fr] lg:pt-20">
-        <div>
-          <div className="animate-rise inline-flex items-center gap-2 rounded-full border border-[#cac5fe]/20 bg-[#cac5fe]/5 px-3.5 py-1.5 text-xs font-medium tracking-wide text-[#cac5fe]">
-            <Sparkles className="h-3.5 w-3.5" />
-            AI voice interviews
-          </div>
+          <div>
+            <div className="animate-rise inline-flex items-center gap-2 rounded-full border border-[#cac5fe]/20 bg-[#cac5fe]/5 px-3.5 py-1.5 text-xs font-medium tracking-wide text-[#cac5fe]">
+              <Sparkles className="h-3.5 w-3.5" />
+              AI voice interviews
+            </div>
 
-          <h1
-            className="animate-rise mt-6 font-[family-name:var(--font-display)] text-[2.75rem] font-semibold leading-[1.04] tracking-tight sm:text-6xl [animation-delay:60ms]"
-          >
-            Rehearse the interview
-            <br />
-            before it&apos;s{" "}
-            <span className="bg-gradient-to-r from-[#cac5fe] via-[#b8b0ff] to-[#7c6dff] bg-clip-text text-transparent">
-              real.
-            </span>
-          </h1>
-
-          <p className="animate-rise mt-6 max-w-md text-lg leading-relaxed text-[#a9a6c4] [animation-delay:120ms]">
-            InterviewGPT runs a live voice interview tuned to your role, then scores
-            every answer and shows you exactly what to sharpen.
-          </p>
-
-          <div className="animate-rise mt-9 flex flex-wrap items-center gap-3 [animation-delay:180ms]">
-            <Link
-              href="/sign-in"
-              className="group flex items-center gap-2 rounded-full bg-gradient-to-r from-[#cac5fe] to-[#7c6dff] px-6 py-3.5 font-semibold text-[#08070d] shadow-[0_8px_30px_-8px_rgba(124,109,255,0.7)] transition hover:brightness-110"
+            <h1
+              className="animate-rise mt-6 font-[family-name:var(--font-display)] text-[2.75rem] font-semibold leading-[1.04] tracking-tight sm:text-6xl [animation-delay:60ms]"
             >
-              Start practicing free
-              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-            </Link>
-            <Link
-              href="/demo"
-              className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3.5 font-medium transition hover:border-white/20 hover:bg-white/10"
-            >
-              <Play className="h-4 w-4" />
-              Hear a sample
-            </Link>
-          </div>
-
-          <p className="animate-rise mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[#7d7a99] [animation-delay:240ms]">
-            {["No card required", "Runs in your browser", "Voice or text"].map((t) => (
-              <span key={t} className="flex items-center gap-1.5">
-                <Check className="h-3.5 w-3.5 text-[#49de50]" />
-                {t}
+              Rehearse the interview
+              <br />
+              before it&apos;s{" "}
+              <span className="bg-gradient-to-r from-[#cac5fe] via-[#b8b0ff] to-[#7c6dff] bg-clip-text text-transparent">
+                real.
               </span>
-            ))}
-          </p>
-        </div>
+            </h1>
 
-        {/* Live interview panel — the signature element */}
-        <div className="animate-rise [animation-delay:200ms]">
-          <div className="relative rounded-3xl border border-white/10 bg-gradient-to-b from-white/[0.07] to-white/[0.02] p-5 shadow-2xl backdrop-blur-sm">
-            {/* Panel header */}
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
-              <div className="flex items-center gap-2.5">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#49de50]/70" />
-                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#49de50]" />
+            <p className="animate-rise mt-6 max-w-md text-lg leading-relaxed text-[#a9a6c4] [animation-delay:120ms]">
+              InterviewGPT runs a live voice interview tuned to your role, then scores
+              every answer and shows you exactly what to sharpen.
+            </p>
+
+            <div className="animate-rise mt-9 flex flex-wrap items-center gap-3 [animation-delay:180ms]">
+              <Link
+                href="/sign-in"
+                className="group flex items-center gap-2 rounded-full bg-gradient-to-r from-[#cac5fe] to-[#7c6dff] px-6 py-3.5 font-semibold text-[#08070d] shadow-[0_8px_30px_-8px_rgba(124,109,255,0.7)] transition hover:brightness-110"
+              >
+                Start practicing free
+                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+              </Link>
+            </div>
+
+            <p className="animate-rise mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[#7d7a99] [animation-delay:240ms]">
+              {["No card required", "Runs in your browser", "Voice or text"].map((t) => (
+                <span key={t} className="flex items-center gap-1.5">
+                  <Check className="h-3.5 w-3.5 text-[#49de50]" />
+                  {t}
                 </span>
-                <span className="text-sm font-medium">Live · Full-stack Engineer</span>
-              </div>
-              <span className="text-xs text-[#7d7a99]">04:12</span>
-            </div>
-
-            {/* Waveform */}
-            <div className="flex h-16 items-center justify-center gap-1 py-4">
-              {[0.5, 0.8, 0.35, 1, 0.6, 0.9, 0.45, 0.75, 0.3, 0.85, 0.55, 0.95, 0.4, 0.7, 0.5].map(
-                (h, i) => (
-                  <span
-                    key={i}
-                    className="wave-bar w-1 rounded-full bg-gradient-to-t from-[#7c6dff] to-[#cac5fe]"
-                    style={{ height: `${h * 100}%`, animationDelay: `${i * 90}ms` }}
-                  />
-                )
-              )}
-            </div>
-
-            {/* Transcript */}
-            <div className="space-y-3">
-              {exchange.map((m, i) => (
-                <div
-                  key={i}
-                  className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-                    m.who === "You"
-                      ? "ml-6 bg-[#cac5fe]/10 text-[#ece9ff]"
-                      : "mr-6 bg-white/[0.04] text-[#c9c6de]"
-                  }`}
-                >
-                  <p className="mb-1 text-[0.7rem] font-medium uppercase tracking-wider text-[#7d7a99]">
-                    {m.who}
-                  </p>
-                  <p>
-                    {m.text}
-                    {m.live && <span className="ml-0.5 inline-block h-4 w-0.5 translate-y-0.5 animate-pulse bg-[#cac5fe]" />}
-                  </p>
-                </div>
               ))}
-            </div>
+            </p>
+          </div>
 
-            {/* Score chip */}
-            <div className="mt-4 flex items-center justify-between rounded-2xl border border-[#49de50]/20 bg-[#49de50]/[0.06] px-4 py-3">
-              <div className="flex items-center gap-2 text-sm text-[#c9c6de]">
-                <Gauge className="h-4 w-4 text-[#49de50]" />
-                Answer strength
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="h-1.5 w-24 overflow-hidden rounded-full bg-white/10">
-                  <div className="h-full w-[82%] rounded-full bg-gradient-to-r from-[#49de50] to-[#cac5fe]" />
+          {/* Live interview panel — the signature element */}
+          <div className="animate-rise [animation-delay:200ms]">
+            <div className="relative rounded-3xl border border-white/10 bg-gradient-to-b from-white/[0.07] to-white/[0.02] p-5 shadow-2xl backdrop-blur-sm">
+              {/* Panel header */}
+              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <div className="flex items-center gap-2.5">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#49de50]/70" />
+                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#49de50]" />
+                  </span>
+                  <span className="text-sm font-medium">Live · Full-stack Engineer</span>
                 </div>
-                <span className="text-sm font-semibold text-[#49de50]">82</span>
+                <span className="text-xs text-[#7d7a99]">04:12</span>
+              </div>
+
+              {/* Waveform */}
+              <div className="flex h-16 items-center justify-center gap-1 py-4">
+                {[0.5, 0.8, 0.35, 1, 0.6, 0.9, 0.45, 0.75, 0.3, 0.85, 0.55, 0.95, 0.4, 0.7, 0.5].map(
+                  (h, i) => (
+                    <span
+                      key={i}
+                      className="wave-bar w-1 rounded-full bg-gradient-to-t from-[#7c6dff] to-[#cac5fe]"
+                      style={{ height: `${h * 100}%`, animationDelay: `${i * 90}ms` }}
+                    />
+                  )
+                )}
+              </div>
+
+              {/* Transcript */}
+              <div className="space-y-3">
+                {exchange.map((m, i) => (
+                  <div
+                    key={i}
+                    className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${m.who === "You"
+                        ? "ml-6 bg-[#cac5fe]/10 text-[#ece9ff]"
+                        : "mr-6 bg-white/[0.04] text-[#c9c6de]"
+                      }`}
+                  >
+                    <p className="mb-1 text-[0.7rem] font-medium uppercase tracking-wider text-[#7d7a99]">
+                      {m.who}
+                    </p>
+                    <p>
+                      {m.text}
+                      {m.live && <span className="ml-0.5 inline-block h-4 w-0.5 translate-y-0.5 animate-pulse bg-[#cac5fe]" />}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Score chip */}
+              <div className="mt-4 flex items-center justify-between rounded-2xl border border-[#49de50]/20 bg-[#49de50]/[0.06] px-4 py-3">
+                <div className="flex items-center gap-2 text-sm text-[#c9c6de]">
+                  <Gauge className="h-4 w-4 text-[#49de50]" />
+                  Answer strength
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="h-1.5 w-24 overflow-hidden rounded-full bg-white/10">
+                    <div className="h-full w-[82%] rounded-full bg-gradient-to-r from-[#49de50] to-[#cac5fe]" />
+                  </div>
+                  <span className="text-sm font-semibold text-[#49de50]">82</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
         </section>
       </div>
 

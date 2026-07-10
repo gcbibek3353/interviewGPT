@@ -102,34 +102,34 @@ const SignInForm = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-[#08070d]">
       <div className="w-full max-w-md relative">
         {/* Left decorative element */}
-        <div className="absolute -left-10 top-1/4 w-20 h-40 bg-purple-600/20 rounded-full blur-2xl"></div>
+        <div className="absolute -left-10 top-1/4 w-20 h-40 bg-[#7c6dff]/20 rounded-full blur-2xl"></div>
         {/* Right decorative element */}
-        <div className="absolute -right-10 bottom-1/4 w-20 h-40 bg-purple-600/20 rounded-full blur-2xl"></div>
+        <div className="absolute -right-10 bottom-1/4 w-20 h-40 bg-[#7c6dff]/20 rounded-full blur-2xl"></div>
 
-        <div className="relative bg-gray-800 rounded-xl shadow-xl overflow-hidden border border-gray-700">
-          {/* Purple accent top bar */}
-          <div className="h-2 bg-purple-600 w-full"></div>
+        <div className="relative bg-white/[0.02] rounded-3xl shadow-2xl overflow-hidden border border-white/10">
+          {/* Lavender accent top bar */}
+          <div className="h-2 bg-gradient-to-r from-[#cac5fe] to-[#7c6dff] w-full"></div>
 
           {/* Split design with decorative element */}
           <div className="flex flex-col md:flex-row">
             {/* Left section with visual element */}
-            <div className="bg-gray-900 p-8 flex items-center justify-center md:w-2/5">
+            <div className="bg-white/[0.02] border-b border-white/10 md:border-b-0 md:border-r p-8 flex items-center justify-center md:w-2/5">
               <div className="text-center">
-                <div className="mx-auto w-16 h-16 bg-purple-600/20 rounded-full flex items-center justify-center mb-4">
-                  <Mic className="w-8 h-8 text-purple-500" />
+                <div className="mx-auto w-16 h-16 bg-gradient-to-br from-[#cac5fe] to-[#7c6dff] rounded-2xl flex items-center justify-center mb-4 text-[#08070d]">
+                  <Mic className="w-8 h-8" strokeWidth={2.5} />
                 </div>
-                <h2 className="text-xl font-bold text-white">InterviewGPT</h2>
-                <p className="text-gray-400 text-sm mt-2">Your personal interview coach</p>
+                <h2 className="text-xl font-semibold tracking-tight text-[#ece9ff] font-[family-name:var(--font-display)]">InterviewGPT</h2>
+                <p className="text-[#a9a6c4] text-sm mt-2">Your personal interview coach</p>
 
                 {/* Visual representation of voice waves */}
                 <div className="flex justify-center items-center gap-1 mt-6">
                   {[1, 2, 3, 4, 5].map((i) => (
                     <div
                       key={i}
-                      className="h-8 w-1 bg-purple-600/80 rounded-full animate-pulse"
+                      className="h-8 w-1 bg-gradient-to-t from-[#7c6dff] to-[#cac5fe] rounded-full animate-pulse"
                       style={{
                         animationDelay: `${i * 0.1}s`,
                         height: `${16 + i * 4}px`
@@ -142,16 +142,16 @@ const SignInForm = () => {
 
             {/* Right section with form */}
             <div className="p-8 md:w-3/5">
-              <h1 className="text-2xl font-bold text-white mb-1">Welcome Back</h1>
-              <p className="text-gray-400 text-sm mb-6">Sign in to continue your interview practice</p>
+              <h1 className="text-2xl font-semibold tracking-tight text-[#ece9ff] mb-1 font-[family-name:var(--font-display)]">Welcome Back</h1>
+              <p className="text-[#a9a6c4] text-sm mb-6">Sign in to continue your interview practice</p>
 
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-300">Email</label>
+                    <label className="text-sm font-medium text-[#c9c6de]">Email</label>
                     <div className="relative ">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center justify-center pointer-events-none">
-                        <Mail className="h-5 w-5 text-gray-500" />
+                        <Mail className="h-5 w-5 text-[#5a5872]" />
                       </div>
                       <FormField
                         control={form.control}
@@ -161,7 +161,7 @@ const SignInForm = () => {
                             {...field}
                             type="email"
                             placeholder="you@example.com"
-                            className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-lg bg-gray-900 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                            className="block w-full pl-10 pr-3 py-2 border border-white/10 rounded-lg bg-white/5 text-[#ece9ff] placeholder-[#5a5872] focus:outline-none focus:ring-2 focus:ring-[#cac5fe]/20 focus:border-[#cac5fe]/50"
                           />
                         )}
                       />
@@ -170,14 +170,14 @@ const SignInForm = () => {
 
                   <div className="space-y-2">
                     <div className="flex justify-between">
-                      <label className="text-sm font-medium text-gray-300">Password</label>
-                      {/* <Link href="" className="text-sm text-purple-500 hover:text-purple-400">
+                      <label className="text-sm font-medium text-[#c9c6de]">Password</label>
+                      {/* <Link href="" className="text-sm text-[#cac5fe] hover:text-[#b8b0ff]">
                         Forgot password?
                       </Link> */}
                     </div>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Lock className="h-5 w-5 text-gray-500" />
+                        <Lock className="h-5 w-5 text-[#5a5872]" />
                       </div>
                       <FormField
                         control={form.control}
@@ -187,7 +187,7 @@ const SignInForm = () => {
                             {...field}
                             type={showPassword ? "text" : "password"}
                             placeholder="••••••••"
-                            className="block w-full pl-10 pr-10 py-2 border border-gray-700 rounded-lg bg-gray-900 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                            className="block w-full pl-10 pr-10 py-2 border border-white/10 rounded-lg bg-white/5 text-[#ece9ff] placeholder-[#5a5872] focus:outline-none focus:ring-2 focus:ring-[#cac5fe]/20 focus:border-[#cac5fe]/50"
                           />
                         )}
                       />
@@ -197,9 +197,9 @@ const SignInForm = () => {
                         className="absolute inset-y-0 right-0 pr-3 flex items-center"
                       >
                         {showPassword ? (
-                          <EyeOff className="h-5 w-5 text-gray-500 hover:text-gray-300" />
+                          <EyeOff className="h-5 w-5 text-[#5a5872] hover:text-[#c9c6de]" />
                         ) : (
-                          <Eye className="h-5 w-5 text-gray-500 hover:text-gray-300" />
+                          <Eye className="h-5 w-5 text-[#5a5872] hover:text-[#c9c6de]" />
                         )}
                       </button>
                     </div>
@@ -207,7 +207,7 @@ const SignInForm = () => {
 
                   <Button
                     type="submit"
-                    className="w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg flex items-center justify-center gap-2 transition-colors duration-300"
+                    className="w-full py-2 px-4 bg-gradient-to-r from-[#cac5fe] to-[#7c6dff] text-[#08070d] font-semibold rounded-full flex items-center justify-center gap-2 shadow-[0_8px_30px_-8px_rgba(124,109,255,0.7)] transition hover:brightness-110"
                   >
                     Sign In
                     <ArrowRight className="w-4 h-4" />
@@ -218,10 +218,10 @@ const SignInForm = () => {
               <div className="mt-6">
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-700"></div>
+                    <div className="w-full border-t border-white/10"></div>
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-gray-800 text-gray-400">Or continue with</span>
+                    <span className="px-2 bg-[#08070d] text-[#a9a6c4]">Or continue with</span>
                   </div>
                 </div>
 
@@ -230,7 +230,7 @@ const SignInForm = () => {
                     type="button"
                     onClick={handleGoogleSignIn}
                     disabled={isGoogleLoading}
-                    className="w-full py-2 px-4 bg-gray-900 border border-gray-700 rounded-lg text-gray-300 hover:bg-gray-800 transition-colors duration-300 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="w-full py-2 px-4 bg-white/5 border border-white/10 rounded-full text-[#ece9ff] font-medium hover:border-white/20 hover:bg-white/10 transition flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                       <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -243,9 +243,9 @@ const SignInForm = () => {
                 </div>
               </div>
 
-              <p className="text-center text-sm text-gray-400 mt-6">
+              <p className="text-center text-sm text-[#a9a6c4] mt-6">
                 Don't have an account?{' '}
-                <Link href="/sign-up" className="text-purple-500 hover:text-purple-400 hover:underline font-medium">
+                <Link href="/sign-up" className="text-[#cac5fe] hover:brightness-110 hover:underline font-medium">
                   Sign up now
                 </Link>
               </p>

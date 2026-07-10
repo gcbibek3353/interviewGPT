@@ -8,7 +8,7 @@ const DashboardLayout = async ({ children }: { children: ReactNode }) => {
     redirect('/sign-in')
   }
   return (
-    <div>{children}</div>
+    <div className="min-h-screen bg-[#08070d] text-[#ece9ff]">{children}</div>
   )
 }
 

@@ -108,7 +108,7 @@ const page = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#cac5fe]"></div>
       </div>
     );
   }
@@ -116,7 +116,7 @@ const page = () => {
   if (error) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded max-w-md">
+        <div className="bg-[#f75353]/10 border border-[#f75353]/30 text-[#f75353] px-4 py-3 rounded-lg max-w-md">
           <p>{error}</p>
         </div>
       </div>
@@ -126,19 +126,19 @@ const page = () => {
   if (!feedback) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="bg-slate-100 text-slate-900 px-4 py-3 rounded max-w-md">
-          <p className='bg-slate-100 text-slate-900'>No feedback found for this interview</p>
+        <div className="bg-white/[0.02] border border-white/10 text-[#c9c6de] px-4 py-3 rounded-lg max-w-md">
+          <p className="text-[#c9c6de]">No feedback found for this interview</p>
         </div>
       </div>
     );
   }
   return (
-    <div className="max-w-4xl mx-auto my-8 md:my-12 p-6 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-md">
+    <div className="max-w-4xl mx-auto my-8 md:my-12 p-6 bg-white/[0.02] rounded-2xl border border-white/10">
       {/* Header Section */}
       <div className="mb-8">
         <Link
           href="/dashboard"
-          className="inline-flex items-center mb-6 px-4 py-2 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          className="inline-flex items-center gap-2 mb-6 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-medium text-[#ece9ff] transition hover:border-white/20 hover:bg-white/10"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -147,29 +147,29 @@ const page = () => {
         </Link>
         <div className="flex justify-between items-start">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-2">
+            <h1 className="text-2xl md:text-3xl font-[family-name:var(--font-display)] font-semibold tracking-tight text-[#ece9ff] mb-2">
               Interview Feedback
             </h1>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-[#a9a6c4]">
               Interview ID: <span className="font-mono">{feedback.interviewId}</span>
             </p>
           </div>
           <div className="text-right">
-            <div className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+            <div className="text-lg font-semibold text-[#c9c6de]">
               Overall Score:
-              <span className={`ml-2 text-2xl ${feedback.totalScore >= 80 ? 'text-green-600 dark:text-green-400' :
-                  feedback.totalScore >= 60 ? 'text-blue-600 dark:text-blue-400' :
-                    'text-red-600 dark:text-red-400'
+              <span className={`ml-2 text-2xl ${feedback.totalScore >= 80 ? 'text-[#49de50]' :
+                  feedback.totalScore >= 60 ? 'text-[#cac5fe]' :
+                    'text-[#f75353]'
                 }`}>
                 {feedback.totalScore}/100
               </span>
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
+            <p className="text-sm text-[#7d7a99] mt-1">
               {feedback.createdAt ? new Date(feedback.createdAt).toLocaleDateString() : ''}
             </p>
             <button
               onClick={downloadPdf}
-              className="mt-3 inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 transition-colors"
+              className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#cac5fe] to-[#7c6dff] px-6 py-3 text-sm font-semibold text-[#08070d] shadow-[0_8px_30px_-8px_rgba(124,109,255,0.7)] transition hover:brightness-110"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -182,22 +182,22 @@ const page = () => {
 
       {/* Category Scores */}
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
+        <h2 className="text-xl font-[family-name:var(--font-display)] font-semibold tracking-tight text-[#ece9ff] mb-4 pb-2 border-b border-white/10">
           Category Breakdown
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {feedback.categoryScores.map((category, index) => (
-            <div key={index} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+            <div key={index} className="bg-white/[0.02] p-4 rounded-2xl border border-white/10">
               <div className="flex justify-between items-center mb-2">
-                <h3 className="font-medium text-gray-800 dark:text-gray-200">{category.name}</h3>
-                <span className={`px-2 py-1 rounded text-xs font-semibold ${category.score >= 80 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
-                    category.score >= 60 ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' :
-                      'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                <h3 className="font-medium text-[#ece9ff]">{category.name}</h3>
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${category.score >= 80 ? 'bg-[#49de50]/10 text-[#49de50]' :
+                    category.score >= 60 ? 'bg-[#cac5fe]/10 text-[#cac5fe]' :
+                      'bg-[#f75353]/10 text-[#f75353]'
                   }`}>
                   {category.score}/100
                 </span>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-[#a9a6c4]">
                 {category.comment}
               </p>
             </div>
@@ -208,8 +208,8 @@ const page = () => {
       {/* Strengths & Improvement Areas */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         {/* Strengths */}
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-sm border border-green-100 dark:border-green-900/50">
-          <h2 className="text-lg font-semibold text-green-700 dark:text-green-400 mb-3 flex items-center">
+        <div className="bg-white/[0.02] p-5 rounded-2xl border border-[#49de50]/30">
+          <h2 className="text-lg font-semibold text-[#49de50] mb-3 flex items-center">
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -218,10 +218,10 @@ const page = () => {
           <ul className="space-y-2">
             {feedback.strengths.map((strength, index) => (
               <li key={index} className="flex items-start">
-                <span className="flex-shrink-0 mt-1 mr-2 text-green-500">
+                <span className="flex-shrink-0 mt-1 mr-2 text-[#49de50]">
                   •
                 </span>
-                <span className="text-gray-700 dark:text-gray-300">
+                <span className="text-[#c9c6de]">
                   {strength}
                 </span>
               </li>
@@ -230,8 +230,8 @@ const page = () => {
         </div>
 
         {/* Areas for Improvement */}
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-sm border border-blue-100 dark:border-blue-900/50">
-          <h2 className="text-lg font-semibold text-blue-700 dark:text-blue-400 mb-3 flex items-center">
+        <div className="bg-white/[0.02] p-5 rounded-2xl border border-[#cac5fe]/30">
+          <h2 className="text-lg font-semibold text-[#cac5fe] mb-3 flex items-center">
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
@@ -240,10 +240,10 @@ const page = () => {
           <ul className="space-y-2">
             {feedback.areasForImprovement.map((area, index) => (
               <li key={index} className="flex items-start">
-                <span className="flex-shrink-0 mt-1 mr-2 text-blue-500">
+                <span className="flex-shrink-0 mt-1 mr-2 text-[#cac5fe]">
                   •
                 </span>
-                <span className="text-gray-700 dark:text-gray-300">
+                <span className="text-[#c9c6de]">
                   {area}
                 </span>
               </li>
@@ -253,17 +253,17 @@ const page = () => {
       </div>
 
       {/* Final Assessment */}
-      <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-        <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">
+      <div className="bg-white/[0.02] p-5 rounded-2xl border border-white/10">
+        <h2 className="text-lg font-[family-name:var(--font-display)] font-semibold tracking-tight text-[#ece9ff] mb-3">
           Final Assessment
         </h2>
-        <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line">
+        <p className="text-[#c9c6de] whitespace-pre-line">
           {feedback.finalAssessment}
         </p>
       </div>
 
       {/* Footer */}
-      <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-500">
+      <div className="mt-6 text-center text-sm text-[#7d7a99]">
         <p>Feedback ID: {feedback.id}</p>
       </div>
     </div>

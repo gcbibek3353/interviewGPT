@@ -38,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${poppins.variable} ${bricolage.variable} antialiased pattern`}
+        className={`${geistSans.variable} ${poppins.variable} ${bricolage.variable} antialiased bg-[#08070d]`}
       >
         {children}
         <Toaster />
