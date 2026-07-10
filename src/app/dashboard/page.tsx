@@ -64,7 +64,7 @@ const Dashboard = () => {
         <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-purple-500 bg-clip-text text-transparent">
           Welcome back, {user?.name}!
         </h2>
-        <Link 
+        <Link
           href={'/dashboard/interview'}
           className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 transition-all duration-200 transform hover:-translate-y-0.5"
         >
@@ -74,7 +74,7 @@ const Dashboard = () => {
           Create New Interview
         </Link>
       </div>
-  
+
       {/* Your Interviews Section */}
       <div className="bg-gray-900 rounded-xl p-6 shadow-xl border border-gray-800 hover:border-purple-500/30 transition-all duration-300">
         <div className="flex justify-between items-center mb-6">
@@ -92,7 +92,7 @@ const Dashboard = () => {
             </span>
           )}
         </div>
-        
+
         {hasPastInterviews ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {userInterviews?.map((interview) => (
@@ -106,8 +106,8 @@ const Dashboard = () => {
             </svg>
             <p className="mt-4 text-xl font-medium text-gray-300">No interviews yet</p>
             <p className="mt-2 text-gray-500">Your completed interviews will appear here</p>
-            <Link 
-              href={'/dashboard/interview'} 
+            <Link
+              href={'/dashboard/interview'}
               className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-purple-400 hover:text-purple-300"
             >
               Start your first interview →
@@ -115,7 +115,7 @@ const Dashboard = () => {
           </div>
         )}
       </div>
-  
+
       {/* Upcoming Interviews Section */}
       <div className="bg-gray-900 rounded-xl p-6 shadow-xl border border-gray-800 hover:border-green-500/30 transition-all duration-300">
         <div className="flex justify-between items-center mb-6">
@@ -133,7 +133,7 @@ const Dashboard = () => {
             </span>
           )}
         </div>
-        
+
         {hasUpcomingInterviews ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {latestInterviews?.map((interview) => (
@@ -147,8 +147,8 @@ const Dashboard = () => {
             </svg>
             <p className="mt-4 text-xl font-medium text-gray-300">No interviews available</p>
             <p className="mt-2 text-gray-500">Check back later for new opportunities</p>
-            <button 
-              onClick={() => {/* Add refresh logic */}}
+            <button
+              onClick={() => {/* Add refresh logic */ }}
               className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-green-400 hover:text-green-300"
             >
               Refresh listings
@@ -161,7 +161,7 @@ const Dashboard = () => {
 
 
 
-  
+
       {/* Stats Section (Bonus) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 hover:bg-gray-800/50 transition-colors duration-300">
@@ -177,7 +177,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 hover:bg-gray-800/50 transition-colors duration-300">
           <div className="flex items-center">
             <div className="p-3 rounded-lg bg-green-900/20 mr-4">
@@ -191,7 +191,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 hover:bg-gray-800/50 transition-colors duration-300">
           <div className="flex items-center">
             <div className="p-3 rounded-lg bg-purple-900/20 mr-4">
