@@ -341,3 +341,40 @@
     transform: translateY(0);
   }
 }
+/* ── Landing page motion ─────────────────────────────── */
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.28); }
+  50%      { transform: scaleY(1); }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ambient {
+  0%, 100% { opacity: 0.55; transform: translate3d(0, 0, 0) scale(1); }
+  50%      { opacity: 0.8;  transform: translate3d(0, -14px, 0) scale(1.06); }
+}
+
+.wave-bar {
+  transform-origin: bottom center;
+  animation: wave 1.1s ease-in-out infinite;
+}
+
+.animate-rise {
+  animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.ambient-glow {
+  animation: ambient 9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave-bar,
+  .animate-rise,
+  .ambient-glow {
+    animation: none !important;
+  }
+  .animate-rise { opacity: 1; transform: none; }
+}
