@@ -1,34 +1,32 @@
-"use client"; // This is not the server action because we are using client side SDK of firebase
+"use server"; // Server actions — reads run through the Admin SDK using the
+// verified session cookie, so they bypass firestore.rules (which deny all
+// client access). Authorization is enforced here via getCurrentUser().
 
-import { collection, query, where, orderBy, limit, getDocs, getDoc, doc, setDoc, addDoc } from "firebase/firestore";
-import { db } from "@/firebase/client";
-import { generateObject } from "ai";
-import { google } from "@/lib/google-ai.config";
-import { feedbackSchema } from "@/constants";
+import { db } from "@/firebase/admin";
+import { getCurrentUser } from "@/lib/actions/auth.action";
 
 export async function getInterviewsByUserId(
     userId: string
 ): Promise<Interview[] | null> {
     try {
-        if (!userId) {
+        const currentUser = await getCurrentUser();
+        if (!currentUser || !userId) {
             return null;
         }
 
+        // Sort in memory (by ISO createdAt) to avoid a composite index on
+        // (userId, createdAt).
+        const interviewsSnapshot = await db
+            .collection("interviews")
+            .where("userId", "==", userId)
+            .get();
 
-        const interviewsRef = collection(db, "interviews");
+        const interviews = interviewsSnapshot.docs
+            .map((doc) => ({ id: doc.id, ...doc.data() }) as Interview)
+            .sort((a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""));
 
-        const interviewsQuery = query(
-            interviewsRef,
-            where("userId", "==", userId),
-            orderBy("createdAt", "desc")
-        );
-
-        const interviewsSnapshot = await getDocs(interviewsQuery);
-
-        return interviewsSnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-        })) as Interview[];
+        console.log(`[getInterviewsByUserId] userId=${userId} -> ${interviews.length} interview(s)`);
+        return interviews;
     } catch (error) {
         console.error("Error fetching interviews:", error);
         return null;
@@ -37,25 +35,23 @@ export async function getInterviewsByUserId(
 
 export async function getLatestInterviews(params: GetLatestInterviewsParams) {
     const { userId, interviewLimit = 10 } = params;
-    // console.log('user id calling latest interviews is ' , userId);
     try {
-        const interviewsRef = collection(db, "interviews");
+        const currentUser = await getCurrentUser();
+        if (!currentUser) {
+            return null;
+        }
 
-        const interviewsQuery = query(
-            interviewsRef,
-            where("userId", "!=", userId),
-            orderBy("createdAt", "desc"),
-            limit(interviewLimit),
-        )
-
-        const interviewsSnapshot = await getDocs(interviewsQuery);
-        // console.log(interviewsSnapshot);
+        const interviewsSnapshot = await db
+            .collection("interviews")
+            .where("userId", "!=", userId)
+            .orderBy("createdAt", "desc")
+            .limit(interviewLimit)
+            .get();
 
         return interviewsSnapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
         })) as Interview[];
-
     } catch (error) {
         console.error("Error fetching interviews:", error);
         return null;
@@ -64,79 +60,20 @@ export async function getLatestInterviews(params: GetLatestInterviewsParams) {
 
 export async function getInterviewById(interviewId: string): Promise<Interview | null> {
     try {
-        const interviewRef = doc(db, 'interviews', interviewId);
-        const interview = await getDoc(interviewRef);
-        // console.log(interview);
-        return interview.data() as Interview | null;
+        const currentUser = await getCurrentUser();
+        if (!currentUser || !interviewId) {
+            return null;
+        }
+
+        const interview = await db.collection("interviews").doc(interviewId).get();
+
+        if (!interview.exists) return null;
+
+        return { id: interview.id, ...interview.data() } as Interview;
     } catch (error) {
         console.error("Error fetching the interview:", error);
         return null;
     }
-}
-
-export async function createFeedback(params: CreateFeedbackParams) {
-    const { interviewId, userId, transcript } = params;
-
-    try {
-        const formattedTranscript = transcript.map((sentence: { role: string, content: string }) => (
-            `- ${sentence.role} : ${sentence.content} \n`
-        )).join('');
-
-        const googleModel = google('gemini-2.0-flash-001', {
-            structuredOutputs: false,
-        })
-        console.log(formattedTranscript);
-        const { object } = await generateObject({
-            model: googleModel,
-            schema: feedbackSchema,
-            prompt: `
-            You are an AI interviewer analyzing a mock interview. Your task is to evaluate the candidate based on structured categories. Be thorough and detailed in your analysis. Don't be lenient with the candidate. If there are mistakes or areas for improvement, point them out.
-            Transcript:
-            ${formattedTranscript}
-    
-            Please score the candidate from 0 to 100 in the following areas. Do not add categories other than the ones provided:
-            - **Communication Skills**: Clarity, articulation, structured responses.
-            - **Technical Knowledge**: Understanding of key concepts for the role.
-            - **Problem-Solving**: Ability to analyze problems and propose solutions.
-            - **Cultural & Role Fit**: Alignment with company values and job role.
-            - **Confidence & Clarity**: Confidence in responses, engagement, and clarity.
-            `,
-            system:
-                "You are a professional interviewer analyzing a mock interview. Your task is to evaluate the candidate based on structured categories",
-        });
-
-        console.log(object);
-        // console.log(interviewId, userId);
-        const tempuserId = 'MmiFJpaCSBhlxox0zFJOjsxmdPf1';
-
-        const feedbackRef = collection(db, "feedback");
-        const feedback = await addDoc(feedbackRef, {
-            interviewId,
-            userId: tempuserId,
-            totalScore: object.totalScore,
-            categoryScores: object.categoryScores,
-            strengths: object.strengths,
-            areasForImprovement: object.areasForImprovement,
-            finalAssessment: object.finalAssessment,
-            createdAt: new Date().toISOString()
-        });
-
-        return {
-            success: true,
-            feedbackId: feedback.id
-            // feedbackId : 'static Id for now'
-        }
-
-    } catch (error) {
-        console.error('Error saving feedback');
-        console.log(error);
-
-        return {
-            success: false,
-            feedbackId: ""
-        }
-    }
-
 }
 
 export async function getFeedbackByInterviewAndUserId(params: GetFeedbackByInterviewAndUserIdParams) {
@@ -151,44 +88,97 @@ export async function getFeedbackByInterviewAndUserId(params: GetFeedbackByInter
             throw new Error('userId is required');
         }
 
-        const feedbackRef = collection(db, 'feedback');
-
-        const q = query(feedbackRef, where('interviewId', '==', interviewId), where('userId', '==', userId));
-        const querySnapshot = await getDocs(q);
-
-        if (!querySnapshot.empty) {
-            const feedback = querySnapshot.docs[0];
-            console.log(feedback);
-            return {
-                id: feedback.id,
-                ...feedback.data()
-            } as Feedback;
+        const currentUser = await getCurrentUser();
+        // A user may only read their own feedback.
+        if (!currentUser || currentUser.id !== userId) {
+            return null;
         }
-        return null;
+
+        const querySnapshot = await db
+            .collection("feedback")
+            .where("interviewId", "==", interviewId)
+            .where("userId", "==", userId)
+            .limit(1)
+            .get();
+
+        if (querySnapshot.empty) return null;
+
+        const feedback = querySnapshot.docs[0];
+        return {
+            id: feedback.id,
+            ...feedback.data(),
+        } as Feedback;
     } catch (error) {
         console.error(`Error fetching database`, error);
         return null;
     }
 }
 
-export async function getCompletedInterviews(userId : string) {
+export async function getCompletedInterviews(userId: string): Promise<Feedback[] | null> {
     try {
-        const feedbackRef = collection(db, "feedback");
+        const currentUser = await getCurrentUser();
+        if (!currentUser || currentUser.id !== userId) {
+            return null;
+        }
 
-        const feedbacksQuery = query(
-            feedbackRef,
-            where("userId", "==", userId),
-            orderBy("createdAt", "desc")
-        );
+        // Sort in memory (by ISO createdAt) to avoid a composite index on
+        // (userId, createdAt).
+        const feedbacksSnapshot = await db
+            .collection("feedback")
+            .where("userId", "==", userId)
+            .get();
 
-        const feedbacksSnapshot = await getDocs(feedbacksQuery);
-        console.log(feedbacksSnapshot);
-        // return feedbacksSnapshot.docs.map((doc) => ({
-        //     id: doc.id,
-        //     ...doc.data(),
-        // })) as Interview[];
+        return feedbacksSnapshot.docs
+            .map((doc) => ({ id: doc.id, ...doc.data() }) as Feedback)
+            .sort((a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""));
     } catch (error) {
         console.error("Error fetching completed feedbacks:", error);
+        return null;
+    }
+}
+
+// Returns the user's feedbacks, each joined with the interview it belongs to
+// (so the dashboard can show the role/type alongside the score).
+export async function getUserFeedbacks(
+    userId: string
+): Promise<FeedbackWithInterview[] | null> {
+    try {
+        const currentUser = await getCurrentUser();
+        if (!currentUser || currentUser.id !== userId) {
+            return null;
+        }
+
+        const feedbacksSnapshot = await db
+            .collection("feedback")
+            .where("userId", "==", userId)
+            .get();
+
+        const feedbacks = feedbacksSnapshot.docs
+            .map((doc) => ({ id: doc.id, ...doc.data() }) as Feedback)
+            .sort((a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""));
+
+        // Join each feedback with its interview (best-effort).
+        const withInterviews = await Promise.all(
+            feedbacks.map(async (feedback) => {
+                let interview: Interview | null = null;
+                try {
+                    const interviewDoc = await db
+                        .collection("interviews")
+                        .doc(feedback.interviewId)
+                        .get();
+                    if (interviewDoc.exists) {
+                        interview = { id: interviewDoc.id, ...interviewDoc.data() } as Interview;
+                    }
+                } catch (err) {
+                    console.error("Error joining interview for feedback", feedback.id, err);
+                }
+                return { ...feedback, interview };
+            })
+        );
+
+        return withInterviews;
+    } catch (error) {
+        console.error("Error fetching user feedbacks:", error);
         return null;
     }
 }

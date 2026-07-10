@@ -23,6 +23,11 @@ interface Interview {
   userId: string;
   type: string;
   finalized: boolean;
+  coverImage: string;
+}
+
+interface FeedbackWithInterview extends Feedback {
+  interview: Interview | null;
 }
 
 interface CreateFeedbackParams {

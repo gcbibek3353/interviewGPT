@@ -1,9 +1,6 @@
 'use server';
 
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "@/firebase/client";
-import { auth } from "@/firebase/admin";
-import { getAuth } from "firebase-admin/auth";
+import { db, auth } from "@/firebase/admin";
 import { cookies } from "next/headers";
 
 const ONE_WEEK = 60 * 60 * 24 * 7;
@@ -13,18 +10,18 @@ export async function signUp(params: SignUpParams) {
     // console.log(uid, name, email);
 
     try {
-        const userRef = doc(db, "users", uid);
-        const userRecord = await getDoc(userRef);
+        const userRef = db.collection("users").doc(uid);
+        const userRecord = await userRef.get();
         // console.log(userRecord);
 
-        if (userRecord.exists()) {
+        if (userRecord.exists) {
             return {
                 success: false,
                 message: "User already exists. Sign In"
             };
         }
 
-        await setDoc(userRef, { name, email });
+        await userRef.set({ name, email });
 
         return {
             success: true,
@@ -56,12 +53,12 @@ export async function signInWithOAuth(params: {
 }) {
     const { uid, name, email, idToken } = params;
     try {
-        const userRef = doc(db, "users", uid);
-        const userRecord = await getDoc(userRef);
+        const userRef = db.collection("users").doc(uid);
+        const userRecord = await userRef.get();
 
         // Create the Firestore profile the first time an OAuth user signs in.
-        if (!userRecord.exists()) {
-            await setDoc(userRef, { name, email });
+        if (!userRecord.exists) {
+            await userRef.set({ name, email });
         }
 
         await setSessionCookie(idToken);
@@ -147,10 +144,10 @@ export async function getCurrentUser(): Promise<User | null> {
         const decodedClaims = await auth.verifySessionCookie(sessionCookie, true);
         const uid = decodedClaims.uid;
         // Get user document from Firestore
-        const userRef = doc(db, "users", uid);
-        const userRecord = await getDoc(userRef);
+        const userRef = db.collection("users").doc(uid);
+        const userRecord = await userRef.get();
 
-        if (!userRecord.exists()) return null;
+        if (!userRecord.exists) return null;
 
         return {
             ...userRecord.data(),
@@ -165,4 +162,9 @@ export async function getCurrentUser(): Promise<User | null> {
 export async function isAuthenticated() {
     const user = await getCurrentUser();
     return !!user;
+}
+
+export async function signOut() {
+    const cookieStore = await cookies();
+    cookieStore.delete('session');
 }

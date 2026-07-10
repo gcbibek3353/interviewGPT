@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react'
 import { vapi } from '@/lib/vapi.sdk';
 import { interviewer } from '@/constants';
-import { createFeedback } from '@/lib/actions/general.action';
+import { createFeedback } from '@/lib/actions/feedback.action';
 import { Mic } from 'lucide-react';
 
 enum CallStatus {
@@ -23,6 +23,9 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
     const [isSpeaking, setIsSpeaking] = React.useState(false);
     const [callStatus, setCallStatus] = React.useState<CallStatus>(CallStatus.INACTIVE);
     const [messages, setMessages] = React.useState<SavedMessage[]>([]);
+    // Ensures we only handle the end-of-call action (create interview /
+    // generate feedback) once, even if the effect re-runs.
+    const hasHandledEndRef = React.useRef(false);
 
     useEffect(() => {
         const onCallStart = () => setCallStatus(CallStatus.ACTIVE);
@@ -61,6 +64,30 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
         }
     }, [])
 
+    const handleGenerateInterview = async (messages: SavedMessage[]) => {
+        try {
+            if (messages.length === 0) {
+                // Nothing was said — don't create an empty interview.
+                router.push('/dashboard');
+                return;
+            }
+
+            const res = await fetch('/api/vapi/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    transcript: messages,
+                    userid: userId,
+                }),
+            });
+            const data = await res.json();
+            if (!data.success) console.log('Failed to generate interview', data);
+        } catch (error) {
+            console.log('Error generating interview', error);
+        }
+        router.push('/dashboard');
+    }
+
     const handleGenerateFeedBack = async (messages: SavedMessage[]) => {
         console.log('Control reached here 101');
         const { success, feedbackId } = await createFeedback({
@@ -77,8 +104,9 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
     }
 
     useEffect(() => {
-        if (callStatus === CallStatus.FINISHED) {
-            if (type === "generate") router.push('/dashboard');
+        if (callStatus === CallStatus.FINISHED && !hasHandledEndRef.current) {
+            hasHandledEndRef.current = true;
+            if (type === "generate") handleGenerateInterview(messages);
             else handleGenerateFeedBack(messages);
         }
     }, [messages, callStatus, type, userId])
