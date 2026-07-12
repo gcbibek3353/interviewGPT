@@ -96,6 +96,19 @@ export async function signIn(params: SignInParams) {
             message: "user doesn't exist , create account instead"
         }
 
+        // Ensure a Firestore profile exists. Some accounts exist in Firebase
+        // Auth but never got a `users/{uid}` doc (created directly, or a signUp
+        // that failed after the Auth user was made). Without this doc,
+        // getCurrentUser() returns null and the user can never stay logged in.
+        const userDocRef = db.collection("users").doc(userRecord.uid);
+        const userDoc = await userDocRef.get();
+        if (!userDoc.exists) {
+            await userDocRef.set({
+                name: userRecord.displayName ?? email.split("@")[0],
+                email,
+            });
+        }
+
         await setSessionCookie(idToken);
 
     } catch (error) {
@@ -114,14 +127,6 @@ export async function setSessionCookie(idToken: string) {
         expiresIn: ONE_WEEK * 1000
     })
 
-    console.log("About to set cookie with options:", {
-        maxAge: ONE_WEEK,
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        path: '/',
-        sameSite: "lax"
-    });
-
     cookieStore.set('session', sessionCookie, {
         maxAge: ONE_WEEK,
         httpOnly: true,
@@ -129,8 +134,7 @@ export async function setSessionCookie(idToken: string) {
         path: '/',
        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
        domain: process.env.COOKIE_DOMAIN
-    })    
-    console.log("Cookie set successfully");
+    })
 }
 
 export async function getCurrentUser(): Promise<User | null> {

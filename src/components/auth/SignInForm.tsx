@@ -5,7 +5,6 @@ import { Form, FormField } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { z } from 'zod'
-import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
@@ -22,7 +21,6 @@ const SignInFormSchema = () => {
 }
 
 const SignInForm = () => {
-  const router = useRouter();
   const formSchema = SignInFormSchema();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -58,7 +56,7 @@ const SignInForm = () => {
       }
 
       toast.success("Logged In successfully.");
-      router.push("/dashboard");
+      window.location.assign("/dashboard");
     } catch (error: any) {
       if (error?.code === "auth/popup-closed-by-user") return;
       console.log(error);
@@ -94,7 +92,7 @@ const SignInForm = () => {
       })
 
       toast.success("Logged In successfully.");
-      router.push("/dashboard");
+      window.location.assign("/dashboard");
     } catch (error) {
       console.log(error);
       toast.error(`There was an error: ${error}`);

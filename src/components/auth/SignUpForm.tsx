@@ -59,7 +59,7 @@ const SignUpForm = () => {
             }
 
             toast.success("Signed in successfully.");
-            router.push("/dashboard");
+            window.location.assign("/dashboard");
         } catch (error: any) {
             if (error?.code === "auth/popup-closed-by-user") return;
             console.log(error);
